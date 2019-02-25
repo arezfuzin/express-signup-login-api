@@ -14,7 +14,7 @@ module.exports = {
     const newModel = new Model(newData);
     newModel.save()
       .then((data) => {
-        console.log('data: ', data);
+        console.log(chalk.blue('[API]: '), chalk.green(req.path));
         const responseData = {
           id: data.id,
           userName: data.userName,
@@ -28,10 +28,10 @@ module.exports = {
         });
       })
       .catch((err) => {
-        console.log('err: ', err.message.key);
         console.log(chalk.red('[ERROR]: '), err.message);
         res.status(400).json({
           message: 'Can\'t create account',
+          errorMessage: err.message.split(':')[2].trim(),
         });
       });
   },
@@ -39,6 +39,7 @@ module.exports = {
   logIn(req, res) {
     Model.find()
       .then((data) => {
+        console.log(chalk.blue('[API]: '), chalk.green(req.path));
         if (data.length > 0) {
           res.status(200).json({
             message: 'Data found !',
@@ -55,6 +56,7 @@ module.exports = {
         console.log(chalk.red('[ERROR]: '), err.message);
         res.status(400).json({
           message: 'Can\'t find data',
+          errorMessage: err.message.split(':')[2].trim(),
         });
       });
   },

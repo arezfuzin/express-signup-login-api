@@ -5,6 +5,13 @@ const validateEmail = (email) => {
   return re.test(email);
 };
 
+const validatePassword = (password) => {
+  console.log(password)
+  const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  console.log(re.test(password))
+  return re.test(password);
+};
+
 const schema = new mongoose.Schema({
   role: {
     type: String,
@@ -24,12 +31,12 @@ const schema = new mongoose.Schema({
     unique: true,
     required: true,
     validate: [validateEmail, 'Please fill a valid email address'],
-    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
   },
   password: {
     type: String,
     default: null,
     required: true,
+    validate: [validatePassword, "Your password minimum eight characters, at least one letter and one number"],
   },
 });
 
