@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcryptjs = require('bcryptjs');
 
 const validateEmail = (email) => {
   const re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -6,9 +7,9 @@ const validateEmail = (email) => {
 };
 
 const validatePassword = (password) => {
-  console.log(password)
-  const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  console.log(re.test(password))
+  const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%@#£€*?&]{8,}$/;
+  console.log('password: ', password);
+  console.log('re.test(password): ', re.test(password));
   return re.test(password);
 };
 
@@ -36,8 +37,14 @@ const schema = new mongoose.Schema({
     type: String,
     default: null,
     required: true,
-    validate: [validatePassword, "Your password minimum eight characters, at least one letter and one number"],
+    validate: [validatePassword, 'Your password minimum eight characters, at least one letter and one number'],
   },
+});
+
+schema.pre('save', function before(next) {
+  const hash = bcryptjs.hashSync(this.password, bcryptjs.genSaltSync(10));
+  this.password = hash;
+  next();
 });
 
 const Dummy = mongoose.model('dummys', schema);
