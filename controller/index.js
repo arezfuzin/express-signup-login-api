@@ -1,5 +1,6 @@
 const chalk = require('chalk');
 const jwt = require('jsonwebtoken');
+const bcryptjs = require('bcryptjs');
 const Model = require('../model');
 
 module.exports = {
@@ -30,24 +31,32 @@ module.exports = {
 
   logIn(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
-    Model.find()
+    const { email, password } = req.body;
+    Model.findOne({ email })
       .then((data) => {
-        if (data.length > 0) {
+        const isMatch = bcryptjs.compareSync(password, data.password);
+        if (isMatch) {
+          const responseData = {
+            id: data.id,
+            userName: data.userName,
+            email: data.email,
+          };
+          const token = jwt.sign(responseData, process.env.USER_SECRET);
           res.status(200).json({
-            message: 'Data found !',
-            data,
+            message: 'Loging in !',
+            data: responseData,
+            token,
           });
         } else {
           res.status(200).json({
-            message: 'There is no data !',
-            data,
+            message: 'Wrong password !',
           });
         }
       })
       .catch((err) => {
         console.log(chalk.red('[ERROR]: '), err.message);
         res.status(400).json({
-          message: 'Can\'t find data',
+          message: 'Email wrong !',
         });
       });
   },
