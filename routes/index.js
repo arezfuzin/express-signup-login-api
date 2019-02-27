@@ -6,7 +6,7 @@ const {
 
 const {
   signUp,
-  logIn,
+  signIn,
 } = require('../controller');
 
 router.get('/', (req, res) => {
@@ -16,6 +16,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/sign-up', signUp);
-router.post('/sign-in', authentication, logIn);
+router.post('/sign-in', authentication, signIn);
 
 module.exports = router;

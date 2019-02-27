@@ -14,6 +14,10 @@ const validatePassword = (password) => {
 };
 
 const schema = new mongoose.Schema({
+  role: {
+    type: String,
+    default: 'user',
+  },
   userName: {
     type: String,
     trim: true,

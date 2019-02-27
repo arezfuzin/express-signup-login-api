@@ -29,7 +29,7 @@ module.exports = {
       });
   },
 
-  logIn(req, res) {
+  signIn(req, res) {
     console.log(chalk.yellow('[PATH]:'), chalk.cyanBright(req.path));
     const { email, password } = req.body;
     Model.findOne({ email })
@@ -40,6 +40,7 @@ module.exports = {
             id: data.id,
             userName: data.userName,
             email: data.email,
+            role: data.role,
           };
           const token = jwt.sign(responseData, process.env.USER_SECRET);
           res.status(200).json({
