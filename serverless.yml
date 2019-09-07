@@ -1,0 +1,23 @@
+service: express-signup-login-api
+provider:
+  name: aws
+  runtime: nodejs10.x
+functions:
+  app:
+    handler: app.handler
+    events:
+      - http:
+          path: /
+          method: get
+  signUp:
+    handler: app.handler
+    events:
+      - http:
+          path: /sign-up
+          method: post
+  signIn:
+    handler: app.handler
+    events:
+      - http:
+          path: /sign-in
+          method: post
